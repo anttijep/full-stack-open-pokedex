@@ -5,5 +5,6 @@ module.exports = defineConfig({
     setupNodeEvents() {
       // implement node event listeners here
     },
+    video: false
   },
 })
