@@ -1,1 +1,1 @@
-web: asdanpm run start-prod
+web: asanpm run start-prod
