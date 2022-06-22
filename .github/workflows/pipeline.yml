@@ -53,3 +53,19 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
+  notify_discord:
+    if: ${{ always() && github.event_name == 'push' }}
+    needs: [simple_deployment_pipeline]
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Test Success
+        if: ${{ needs.simple_deployment_pipeline.result == 'success' && !contains(toJson(github.event.commits.*.message), '#skip') }}
+        run: |
+          echo "New build: https://fierce-basin-10134.herokuapp.com"
+      - name: Test Failure
+        if: needs.simple_deployment_pipeline.result == 'success'
+        env:
+          DESCRIPTION: 'Commit: ${{ github.event.head_commit.url }} broke the build'
+        run: |
+          echo $DESCRIPTION
+
