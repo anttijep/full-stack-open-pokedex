@@ -61,9 +61,9 @@ jobs:
       - name: Test Success
         if: ${{ needs.simple_deployment_pipeline.result == 'success' && !contains(toJson(github.event.commits.*.message), '#skip') }}
         run: |
-          echo "New build: https://fierce-basin-10134.herokuapp.com"
+          echo "New build deployed to https://fierce-basin-10134.herokuapp.com"
       - name: Test Failure
-        if: needs.simple_deployment_pipeline.result == 'success'
+        if: needs.simple_deployment_pipeline.result == 'failure'
         env:
           DESCRIPTION: 'Commit: ${{ github.event.head_commit.url }} broke the build'
         run: |
