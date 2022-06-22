@@ -59,13 +59,18 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Test Success
+        uses: rjstone/discord-webhook-notify@v1
         if: ${{ needs.simple_deployment_pipeline.result == 'success' && !contains(toJson(github.event.commits.*.message), '#skip') }}
-        run: |
-          echo "New build deployed to https://fierce-basin-10134.herokuapp.com"
+        with:
+          severity: info
+          details: "deployed to https://fierce-basin-10134.herokuapp.com"
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          text: New version
       - name: Test Failure
+        uses: rjstone/discord-webhook-notify@v1
         if: needs.simple_deployment_pipeline.result == 'failure'
-        env:
-          DESCRIPTION: 'Commit: ${{ github.event.head_commit.url }} broke the build'
-        run: |
-          echo $DESCRIPTION
-
+        with:
+          severity: error
+          details: 'Commit: ${{ github.event.head_commit.url }} broke the build'
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          text: Build failed
